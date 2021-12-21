@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerMovenment : MonoBehaviour
 {
+    private float Dashdir;
     private float playermoveX;
     private bool playerjump;
     private float playerattack;
@@ -35,6 +36,8 @@ public class PlayerMovenment : MonoBehaviour
 
     [SerializeField]
     public float MoveForce = 10f;
+    [SerializeField]
+    public float DASH_FORCE = 3f;
     void Start()
     {
         mybody = GetComponent<Rigidbody2D>();
@@ -79,15 +82,32 @@ public class PlayerMovenment : MonoBehaviour
 
     private void Attack()
     {
-        //playerattack= Input.GetAxisRaw("Fire1");
         if(Input.GetButtonDown("LeftClick"))
         {
+            anim.SetBool(IDLE_ANIMATION, false);
             anim.SetBool(ATTACK_ANIMATION, true);
         }
-        // else
-        // {
-        //     anim.SetBool(ATTACK_ANIMATION, false);
-        // }
+        else 
+        {
+            anim.SetBool(ATTACK_ANIMATION, false);
+        }
+    }
+
+    private void Dash()
+    {
+        if(Input.GetButtonDown("RightClick"))
+        {
+            anim.SetBool(DASH_ANIMATION, true);
+            anim.SetBool(CROUCH_ANIMATION, true);
+        }
+        if(Input.GetButtonUp("RightClick"))
+        {
+            anim.SetBool(CROUCH_ANIMATION, false);
+        }
+        else
+        {
+            anim.SetBool(DASH_ANIMATION, false);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision) 
@@ -109,6 +129,8 @@ public class PlayerMovenment : MonoBehaviour
         {
             anim.SetBool(WIN_ANIMATION, true);
             Win = true;
+            transform.position = new Vector3(2.64f,16.33f,0f);
+            transform.eulerAngles = new Vector3(0f,0f,0f);
         }
     }
 
@@ -119,13 +141,15 @@ public class PlayerMovenment : MonoBehaviour
             AnimatePlayer();
             PlayerMoveKeyboard();
             Attack();
+            Dash();
+            PlayerJump();
         }
     }
     
     private void FixedUpdate() {
         if(!Win)
         {
-            PlayerJump();
+
         }
     }
 }
