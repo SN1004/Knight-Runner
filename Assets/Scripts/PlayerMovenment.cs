@@ -37,7 +37,7 @@ public class PlayerMovenment : MonoBehaviour
     [SerializeField]
     public float MoveForce = 10f;
     [SerializeField]
-    public float DASH_FORCE = 3f;
+    public float DASH_TIME = 1f;
     void Start()
     {
         mybody = GetComponent<Rigidbody2D>();
@@ -129,6 +129,7 @@ public class PlayerMovenment : MonoBehaviour
         {
             anim.SetBool(WIN_ANIMATION, true);
             Win = true;
+            sr.flipX= true;
             transform.position = new Vector3(2.64f,16.33f,0f);
             transform.eulerAngles = new Vector3(0f,0f,0f);
         }
