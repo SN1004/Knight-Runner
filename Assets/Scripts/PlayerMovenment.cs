@@ -28,8 +28,11 @@ public class PlayerMovenment : MonoBehaviour
     private string CROUCH_ANIMATION = "Crouch";
     private string CAST_ANIMATION = "Cast";
     
+    private double Time_temp;
     private Animator anim;
     private SpriteRenderer sr;
+    [SerializeField]
+    private float DashDuration = 1f;
 
     [SerializeField]
     public float JumpForce = 10f;
@@ -99,14 +102,15 @@ public class PlayerMovenment : MonoBehaviour
         {
             anim.SetBool(DASH_ANIMATION, true);
             anim.SetBool(CROUCH_ANIMATION, true);
+            Time_temp = Time.timeAsDouble;
         }
-        if(Input.GetButtonUp("RightClick"))
+        else if(Time.timeAsDouble - Time_temp >= DashDuration)
         {
-            anim.SetBool(CROUCH_ANIMATION, false);
+            anim.SetBool(DASH_ANIMATION, false);
         }
         else
         {
-            anim.SetBool(DASH_ANIMATION, false);
+            anim.SetBool(CROUCH_ANIMATION, false);
         }
     }
 
@@ -150,7 +154,7 @@ public class PlayerMovenment : MonoBehaviour
     private void FixedUpdate() {
         if(!Win)
         {
-
+            transform.eulerAngles = new Vector3(0f,0f,0f);
         }
     }
 }
